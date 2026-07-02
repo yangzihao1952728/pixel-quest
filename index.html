@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🎮</text></svg>">
+<title>像素冒险 · Pixel Quest</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    background: #0d1b2a;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #wrap {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 30%, #1b3a5c, #0d1b2a 70%);
+  }
+  #game {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    background: #7ec0ee;
+    box-shadow: 0 10px 40px rgba(0,0,0,.6), 0 0 0 4px #24344d, 0 0 0 8px #0d1b2a;
+    max-width: 100%;
+    max-height: 100%;
+    touch-action: none;
+  }
+  /* HUD overlay */
+  #hud {
+    position: absolute;
+    top: 14px; left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 26px;
+    pointer-events: none;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 2px 2px 0 rgba(0,0,0,.5);
+    font-size: 18px;
+    letter-spacing: 1px;
+    z-index: 5;
+  }
+  #hud .stat { display: flex; align-items: center; gap: 6px; }
+  .icon { font-size: 20px; }
+  /* Overlays (title / win / lose) */
+  .screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; color: #fff;
+    background: rgba(10, 20, 35, .78);
+    backdrop-filter: blur(3px);
+    z-index: 10;
+    gap: 18px;
+  }
+  .screen.hidden { display: none; }
+  .screen h1 {
+    font-size: clamp(34px, 7vw, 64px);
+    letter-spacing: 3px;
+    text-shadow: 4px 4px 0 #e94560;
+  }
+  .screen h1 small { display:block; font-size: 40%; letter-spacing: 6px; color:#8ecae6; margin-top:8px; }
+  .screen p { font-size: clamp(14px, 2.6vw, 18px); opacity: .9; max-width: 520px; line-height: 1.7; }
+  .screen .panel {
+    width: min(860px, calc(100vw - 32px));
+    max-height: min(78vh, 660px);
+    overflow: auto;
+    padding: 18px;
+    border: 2px solid rgba(255,255,255,.14);
+    border-radius: 8px;
+    background: rgba(13, 27, 42, .78);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 18px 42px rgba(0,0,0,.34);
+  }
+  .menuStats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .menuStats span,
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.14);
+  }
+  .menuRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .btn {
+    pointer-events: auto;
+    cursor: pointer;
+    border: none;
+    font: inherit;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #fff;
+    padding: 14px 44px;
+    border-radius: 10px;
+    background: linear-gradient(#e94560, #b52e46);
+    box-shadow: 0 6px 0 #7c1e30, 0 8px 18px rgba(0,0,0,.4);
+    transition: transform .05s, box-shadow .05s;
+  }
+  .btn.small { font-size: 14px; padding: 9px 16px; letter-spacing: 1px; border-radius: 8px; }
+  .btn.alt { background: linear-gradient(#2d9cdb, #1f6fa1); box-shadow: 0 6px 0 #164c70, 0 8px 18px rgba(0,0,0,.4); }
+  .btn.gold { background: linear-gradient(#f6b73c, #c47c13); box-shadow: 0 6px 0 #80500c, 0 8px 18px rgba(0,0,0,.4); }
+  .btn:disabled { cursor: default; opacity: .42; filter: grayscale(.8); transform: none; }
+  .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #7c1e30, 0 4px 10px rgba(0,0,0,.4); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    text-align: left;
+  }
+  .shopGrid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+  .tile {
+    font: inherit;
+    cursor: pointer;
+    padding: 12px;
+    border: 2px solid rgba(255,255,255,.12);
+    border-radius: 8px;
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    min-height: 118px;
+  }
+  div.tile { cursor: default; }
+  .tile.locked { opacity: .42; filter: grayscale(.85); }
+  .tile h3 { font-size: 17px; margin-bottom: 8px; letter-spacing: 0; }
+  .tile p { font-size: 13px; line-height: 1.45; opacity: .82; margin: 0 0 10px; }
+  .tile .cost { color: #ffd93b; font-weight: 900; }
+  .sectionTitle {
+    margin: 12px 0 8px;
+    font-size: 16px;
+    text-align: left;
+    color: #8ecae6;
+  }
+  .keys { font-size: 13px; opacity:.75; letter-spacing:1px; }
+  kbd {
+    display:inline-block; background:#24344d; border-radius:5px; padding:2px 8px;
+    border-bottom:2px solid #0d1b2a; margin:0 2px; font-family:inherit;
+  }
+  /* Skill badges (top-right) */
+  #skills {
+    position: absolute; top: 50px; right: 14px; z-index: 5;
+    display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  #skills .skill {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(13,27,42,.55);
+    border: 2px solid rgba(255,255,255,.12);
+    border-radius: 8px; padding: 4px 10px 4px 6px;
+    color: #fff; font-weight: 700; font-size: 14px;
+    opacity: .28; filter: grayscale(.8);
+    transition: opacity .25s, filter .25s, box-shadow .25s, border-color .25s;
+  }
+  #skills .skill .dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--c); color:#102a43; font-size: 12px; font-weight: 900;
+  }
+  #skills .skill.on {
+    opacity: 1; filter: none;
+    border-color: var(--c);
+    box-shadow: 0 0 12px var(--c), inset 0 0 8px rgba(255,255,255,.15);
+  }
+  /* Skill-unlock toast (center-top) */
+  #toast {
+    position: absolute; top: 90px; left: 50%;
+    transform: translate(-50%, -30px);
+    z-index: 7; pointer-events: none;
+    background: rgba(13,27,42,.85);
+    border: 2px solid var(--tc, #fff);
+    box-shadow: 0 0 24px var(--tc, #fff);
+    border-radius: 12px; padding: 12px 26px;
+    color: #fff; text-align: center; font-size: 18px; font-weight: 700;
+    opacity: 0; transition: opacity .3s, transform .3s;
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  #toast .tg { font-size: 26px; color: var(--tc); margin-right: 6px; vertical-align: middle; }
+  #toast small { font-weight: 500; opacity: .85; font-size: 13px; }
+  /* Touch controls */
+  #touch {
+    position: absolute; inset: 0; z-index: 6;
+    pointer-events: none; display: none;
+  }
+  #touch .pad {
+    position:absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,.14);
+    border: 2px solid rgba(255,255,255,.35);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; pointer-events:auto;
+    user-select:none; -webkit-user-select:none;
+  }
+  #touch .pad:active { background: rgba(255,255,255,.32); }
+  #btnLeft  { left: 26px;  bottom: 30px; width: 74px; height: 74px; font-size: 32px; }
+  #btnRight { left: 116px; bottom: 30px; width: 74px; height: 74px; font-size: 32px; }
+  #btnJump  { right: 26px; bottom: 24px; width: 92px; height: 92px; font-size: 24px; }
+  #btnDash  { right: 134px; bottom: 30px; width: 64px; height: 64px; font-size: 24px; border-color: #ffe06655; }
+  #btnFire  { right: 134px; bottom: 108px; width: 64px; height: 64px; font-size: 24px; border-color: #ff6b3555; }
+  #btnPound { right: 208px; bottom: 30px; width: 60px; height: 60px; font-size: 22px; border-color: #ff9f1c55; }
+  @media (pointer: coarse) { #touch { display:block; } }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="960" height="540"></canvas>
+
+  <div id="hud">
+    <div class="stat"><span class="icon">🪙</span><span id="coins">0</span></div>
+    <div class="stat"><span class="icon">💰</span><span id="bank">0</span></div>
+    <div class="stat"><span class="icon">❤️</span><span id="lives">3</span></div>
+    <div class="stat"><span class="icon">🏁</span><span id="level">1</span></div>
+    <div class="stat"><span class="icon">⏱️</span><span id="time">0</span></div>
+  </div>
+
+  <div id="skills">
+    <div class="skill" data-skill="doubleJump" style="--c:#8ecae6"><span class="dot">✦</span>二段跳</div>
+    <div class="skill" data-skill="dash" style="--c:#ffe066"><span class="dot">⚡</span>冲刺</div>
+    <div class="skill" data-skill="fireball" style="--c:#ff6b35"><span class="dot">✺</span>火球</div>
+    <div class="skill" data-skill="glide" style="--c:#b388ff"><span class="dot">✈</span>滑翔</div>
+    <div class="skill" data-skill="magnet" style="--c:#ff5c8a"><span class="dot">◎</span>磁铁</div>
+    <div class="skill" data-skill="groundPound" style="--c:#ff9f1c"><span class="dot">▼</span>震地</div>
+    <div class="skill" data-skill="wallJump" style="--c:#4dd6c4"><span class="dot">⇄</span>蹬墙</div>
+  </div>
+
+  <div id="toast"></div>
+
+  <div id="touch">
+    <div class="pad" id="btnLeft">◀</div>
+    <div class="pad" id="btnRight">▶</div>
+    <div class="pad" id="btnDash">⚡</div>
+    <div class="pad" id="btnFire">🔥</div>
+    <div class="pad" id="btnPound">▼</div>
+    <div class="pad" id="btnJump">跳</div>
+  </div>
+
+  <div class="screen" id="titleScreen">
+    <h1>像素冒险<small>PIXEL QUEST</small></h1>
+    <div class="menuStats" id="menuStats"></div>
+    <p>穿越 <b>12</b> 个主题关卡（草原·洞窟·天空·熔岩·冰雪·终焉·水晶·菌光·机械·霓虹·时钟·星渊），沿途解锁
+      <b style="color:#8ecae6">二段跳</b> · <b style="color:#ffe066">冲刺</b> · <b style="color:#ff6b35">火球</b> ·
+      <b style="color:#b388ff">滑翔</b> · <b style="color:#ff5c8a">磁铁</b> · <b style="color:#ff9f1c">震地</b> ·
+      <b style="color:#4dd6c4">蹬墙</b> 七大技能，并在后半段拾取技能强化。关卡途中有<b style="color:#7ee787">复活旗</b>，boss 存活时终点会被封印。</p>
+    <div class="menuRow">
+      <button class="btn" id="startBtn">继续冒险</button>
+      <button class="btn alt" id="levelBtn">选关</button>
+      <button class="btn gold" id="shopBtn">商店</button>
+    </div>
+    <div class="keys">
+      <kbd>←</kbd><kbd>→</kbd>/<kbd>A</kbd><kbd>D</kbd> 移动　·　<kbd>空格</kbd>/<kbd>↑</kbd>/<kbd>W</kbd> 跳跃（二段跳 · 贴墙蹬墙 · 长按滑翔）　·　<kbd>Shift</kbd> 冲刺　·　<kbd>J</kbd>/<kbd>X</kbd> 火球　·　<kbd>S</kbd>/<kbd>↓</kbd> 震地　·　<kbd>P</kbd> 暂停
+    </div>
+  </div>
+
+  <div class="screen hidden" id="levelScreen">
+    <h1>选关</h1>
+    <div class="panel">
+      <div class="menuStats" id="levelStats"></div>
+      <div class="grid" id="levelGrid"></div>
+    </div>
+    <button class="btn small alt" id="levelBackBtn">返回</button>
+  </div>
+
+  <div class="screen hidden" id="shopScreen">
+    <h1>局外商店</h1>
+    <div class="panel">
+      <div class="menuStats" id="shopStats"></div>
+      <h2 class="sectionTitle">成长</h2>
+      <div class="grid shopGrid" id="upgradeGrid"></div>
+      <h2 class="sectionTitle">技能库</h2>
+      <div class="grid shopGrid" id="skillShopGrid"></div>
+      <h2 class="sectionTitle">角色皮肤</h2>
+      <div class="grid shopGrid" id="skinGrid"></div>
+      <div class="menuRow" style="margin-top:14px">
+        <button class="btn small alt" id="exportSaveBtn">导出存档</button>
+        <button class="btn small alt" id="importSaveBtn">导入存档</button>
+        <input type="file" id="importSaveFile" accept="application/json" hidden>
+      </div>
+    </div>
+    <button class="btn small alt" id="shopBackBtn">返回</button>
+  </div>
+
+  <div class="screen hidden" id="endScreen">
+    <h1 id="endTitle">通关！</h1>
+    <p id="endText"></p>
+    <div class="menuRow">
+      <button class="btn" id="againBtn">再试一次</button>
+      <button class="btn alt" id="menuBtn">返回菜单</button>
+    </div>
+  </div>
+
+  <div class="screen hidden" id="pauseScreen">
+    <h1>暂停</h1>
+    <p>按 <kbd>P</kbd> 继续</p>
+  </div>
+</div>
+
+<script src="data/pixel-quest-levels.js?v=2"></script>
+<script src="assets/pixel-quest-assets.js?v=3"></script>
+<script src="save/pixel-quest-save.js?v=2"></script>
+<script src="game.js?v=9"></script>
+</body>
+</html>

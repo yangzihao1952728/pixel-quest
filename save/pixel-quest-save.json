@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "updatedAt": 1783009700553,
+  "coins": 188,
+  "highestLevel": 12,
+  "lifeUpgrades": 0,
+  "nextRunLives": 0,
+  "purchasedSkills": {
+    "doubleJump": false,
+    "dash": false,
+    "fireball": false,
+    "glide": false,
+    "magnet": false,
+    "groundPound": false,
+    "wallJump": false
+  },
+  "unlockedSkills": {
+    "doubleJump": true,
+    "dash": true,
+    "fireball": true,
+    "glide": true,
+    "magnet": true,
+    "groundPound": true,
+    "wallJump": true
+  },
+  "ownedSkins": {
+    "rookie": true,
+    "scout": false,
+    "ember": false,
+    "guard": false
+  },
+  "selectedSkin": "rookie"
+}

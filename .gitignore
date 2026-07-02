@@ -1,0 +1,9 @@
+.agents/
+.claude/
+.codex/
+.playwright-mcp/
+AGENTS.md
+
+*.log
+.DS_Store
+Thumbs.db
