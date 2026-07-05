@@ -126,19 +126,22 @@ function level6() {
 // Level 7 — CRYSTAL : all-skill review, starJump upgrade, mini boss gate.
 // ---------------------------------------------------------------------------
 function level7() {
-  const W = 110; const g = makeGrid(W);
+  const W = 140; const g = makeGrid(W);
   floor(g, 0, 18);
   put(g, FLOOR - 1, 2, 'P');
-  plat(g, 7, 8, 13); coins(g, 6, [9, 10, 11]);
-  floor(g, 24, 45);
+  plat(g, 7, 8, 14); coins(g, 6, [9, 10, 11, 12]);
+  floor(g, 24, 46);
   put(g, FLOOR - 1, 31, 's'); spikes(g, FLOOR - 1, 39, 41);
-  plat(g, 6, 48, 54); coinRow(g, 5, 48, 54);
-  floor(g, 55, 73);
+  plat(g, 6, 50, 56); coinRow(g, 5, 50, 56);
+  floor(g, 58, 72);
   put(g, FLOOR - 1, 64, 's');
-  plat(g, 7, 76, 80); coins(g, 6, [77, 78, 79]);
-  floor(g, 82, 109);
-  put(g, FLOOR - 1, 88, 's'); put(g, FLOOR - 1, 104, 'G');
-  coinRow(g, 8, 92, 100, 2);
+  plat(g, 7, 76, 82); coinRow(g, 6, 76, 82);
+  floor(g, 86, 99);
+  put(g, FLOOR - 1, 92, 's'); spikes(g, FLOOR - 1, 96, 97);
+  floor(g, 104, 139);
+  plat(g, 6, 108, 112); coinRow(g, 5, 108, 112);
+  put(g, FLOOR - 1, 134, 'G');
+  coinRow(g, 8, 121, 131, 2);
   return toStrings(g);
 }
 
@@ -146,18 +149,22 @@ function level7() {
 // Level 8 — FUNGAL : air time and glide control, floatGlide upgrade.
 // ---------------------------------------------------------------------------
 function level8() {
-  const W = 106; const g = makeGrid(W);
+  const W = 146; const g = makeGrid(W);
   floor(g, 0, 14);
   put(g, FLOOR - 1, 2, 'P');
   plat(g, 7, 9, 13); coins(g, 6, [10, 11, 12]);
-  floor(g, 22, 34);
-  put(g, FLOOR - 1, 28, 's');
-  plat(g, 6, 38, 45); coinRow(g, 4, 38, 45);
+  floor(g, 24, 36);
+  put(g, FLOOR - 1, 30, 's');
+  plat(g, 6, 39, 45); coinRow(g, 4, 39, 45);
   plat(g, 4, 50, 55); coinRow(g, 3, 50, 55);
-  floor(g, 58, 72); spikes(g, FLOOR - 1, 64, 66);
-  plat(g, 6, 76, 82); coins(g, 5, [77, 79, 81]);
-  floor(g, 88, 105);
-  put(g, FLOOR - 1, 94, 's'); put(g, FLOOR - 1, 101, 'G');
+  floor(g, 62, 76); spikes(g, FLOOR - 1, 68, 70);
+  plat(g, 5, 80, 86); coinRow(g, 4, 80, 86);
+  floor(g, 91, 105);
+  put(g, FLOOR - 1, 98, 's');
+  plat(g, 6, 110, 116); coinRow(g, 5, 110, 116);
+  floor(g, 122, 145);
+  put(g, FLOOR - 1, 138, 'G');
+  coinRow(g, 8, 128, 136, 2);
   return toStrings(g);
 }
 
@@ -165,16 +172,19 @@ function level8() {
 // Level 9 — GEARWORKS : speed lanes and dash rhythm, dashChain upgrade.
 // ---------------------------------------------------------------------------
 function level9() {
-  const W = 112; const g = makeGrid(W);
+  const W = 150; const g = makeGrid(W);
   floor(g, 0, 16);
   put(g, FLOOR - 1, 2, 'P'); put(g, FLOOR - 1, 8, 's');
-  plat(g, 7, 18, 23); coinRow(g, 6, 18, 23);
-  floor(g, 28, 43); spikes(g, FLOOR - 1, 34, 36);
-  plat(g, 7, 46, 51); coins(g, 6, [47, 48, 49]);
-  floor(g, 55, 70); put(g, FLOOR - 1, 61, 's');
-  plat(g, 6, 74, 80); coinRow(g, 5, 74, 80);
-  floor(g, 84, 111);
-  put(g, FLOOR - 1, 91, 's'); spikes(g, FLOOR - 1, 98, 99); put(g, FLOOR - 1, 105, 'G');
+  plat(g, 7, 20, 26); coinRow(g, 6, 20, 26);
+  floor(g, 31, 48); spikes(g, FLOOR - 1, 38, 40);
+  plat(g, 7, 51, 57); coins(g, 6, [52, 53, 54, 55]);
+  floor(g, 62, 78); put(g, FLOOR - 1, 70, 's');
+  plat(g, 5, 82, 89); coinRow(g, 4, 82, 89);
+  floor(g, 94, 111); spikes(g, FLOOR - 1, 102, 104);
+  plat(g, 6, 114, 120); coinRow(g, 5, 114, 120);
+  floor(g, 124, 149);
+  put(g, FLOOR - 1, 143, 'G');
+  coinRow(g, 8, 130, 140, 2);
   return toStrings(g);
 }
 
@@ -182,17 +192,19 @@ function level9() {
 // Level 10 — NEON : enemy clusters and fireball routing, burstFireball upgrade.
 // ---------------------------------------------------------------------------
 function level10() {
-  const W = 112; const g = makeGrid(W);
+  const W = 152; const g = makeGrid(W);
   floor(g, 0, 20);
   put(g, FLOOR - 1, 2, 'P'); put(g, FLOOR - 1, 9, 's'); put(g, FLOOR - 1, 15, 's');
   plat(g, 6, 24, 30); coinRow(g, 5, 24, 30);
-  floor(g, 34, 52); put(g, FLOOR - 1, 42, 's');
+  floor(g, 36, 55); put(g, FLOOR - 1, 44, 's');
   plat(g, 6, 50, 55); coins(g, 5, [51, 52, 53]);
-  floor(g, 58, 77);
-  put(g, FLOOR - 1, 64, 's'); put(g, FLOOR - 1, 71, 's'); spikes(g, FLOOR - 1, 74, 75);
-  plat(g, 5, 80, 85); coinRow(g, 4, 80, 85);
-  floor(g, 89, 111);
-  put(g, FLOOR - 1, 96, 's'); put(g, FLOOR - 1, 106, 'G');
+  floor(g, 61, 80);
+  put(g, FLOOR - 1, 67, 's'); put(g, FLOOR - 1, 75, 's'); spikes(g, FLOOR - 1, 77, 78);
+  plat(g, 5, 84, 91); coinRow(g, 4, 84, 91);
+  floor(g, 96, 116); put(g, FLOOR - 1, 105, 's'); spikes(g, FLOOR - 1, 112, 113);
+  plat(g, 6, 120, 126); coinRow(g, 5, 120, 126);
+  floor(g, 130, 151);
+  put(g, FLOOR - 1, 145, 'G');
   return toStrings(g);
 }
 
@@ -200,19 +212,23 @@ function level10() {
 // Level 11 — CLOCKWORK : wall-jump shafts, wallFocus upgrade.
 // ---------------------------------------------------------------------------
 function level11() {
-  const W = 108; const g = makeGrid(W);
+  const W = 148; const g = makeGrid(W);
   floor(g, 0, 14);
   put(g, FLOOR - 1, 2, 'P');
   plat(g, 7, 9, 13); coins(g, 6, [10, 11, 12]);
-  floor(g, 20, 33); spikes(g, FLOOR - 1, 27, 29);
-  for (let r = 3; r <= 8; r++) { g[r][38] = 'B'; g[r][42] = 'B'; }
-  coinRow(g, 4, 39, 41);
-  floor(g, 45, 58); put(g, FLOOR - 1, 51, 's');
+  floor(g, 22, 36); spikes(g, FLOOR - 1, 29, 31);
+  for (let r = 3; r <= 8; r++) { g[r][42] = 'B'; g[r][47] = 'B'; }
+  coinRow(g, 4, 43, 46);
+  floor(g, 51, 64); put(g, FLOOR - 1, 58, 's');
   plat(g, 6, 56, 61); coins(g, 5, [57, 58, 59]);
-  for (let r = 2; r <= 8; r++) { g[r][67] = 'B'; g[r][72] = 'B'; }
-  coinRow(g, 3, 68, 71);
-  floor(g, 76, 107);
-  put(g, FLOOR - 1, 84, 's'); spikes(g, FLOOR - 1, 91, 93); put(g, FLOOR - 1, 102, 'G');
+  for (let r = 2; r <= 8; r++) { g[r][74] = 'B'; g[r][80] = 'B'; }
+  coinRow(g, 3, 75, 79);
+  floor(g, 85, 100); put(g, FLOOR - 1, 92, 's');
+  plat(g, 6, 104, 110); coinRow(g, 5, 104, 110);
+  floor(g, 114, 147);
+  spikes(g, FLOOR - 1, 124, 126);
+  put(g, FLOOR - 1, 141, 'G');
+  coinRow(g, 8, 130, 138, 2);
   return toStrings(g);
 }
 
@@ -220,18 +236,19 @@ function level11() {
 // Level 12 — VOID : short warmup, quakePound upgrade, final boss gate.
 // ---------------------------------------------------------------------------
 function level12() {
-  const W = 112; const g = makeGrid(W);
+  const W = 154; const g = makeGrid(W);
   floor(g, 0, 18);
   put(g, FLOOR - 1, 2, 'P');
-  plat(g, 7, 10, 15); coins(g, 6, [11, 12, 13]);
-  floor(g, 24, 42);
-  plat(g, 7, 28, 32); coins(g, 6, [29, 30, 31]);
-  put(g, FLOOR - 1, 36, 's'); spikes(g, FLOOR - 1, 39, 40);
-  floor(g, 48, 63);
-  plat(g, 5, 54, 59); coinRow(g, 4, 54, 59);
-  floor(g, 70, 111);
-  put(g, FLOOR - 1, 78, 's'); put(g, FLOOR - 1, 105, 'G');
-  coinRow(g, 8, 88, 100, 3);
+  plat(g, 7, 10, 16); coins(g, 6, [11, 12, 13, 14]);
+  floor(g, 25, 45);
+  plat(g, 7, 28, 34); coinRow(g, 6, 28, 34);
+  put(g, FLOOR - 1, 38, 's'); spikes(g, FLOOR - 1, 41, 42);
+  floor(g, 51, 68);
+  plat(g, 5, 56, 62); coinRow(g, 4, 56, 62);
+  floor(g, 76, 153);
+  put(g, FLOOR - 1, 86, 's'); spikes(g, FLOOR - 1, 97, 99);
+  coinRow(g, 8, 105, 116, 3);
+  put(g, FLOOR - 1, 148, 'G');
   return toStrings(g);
 }
 
@@ -242,16 +259,32 @@ const levels = {
 };
 const CP = {
   3: [[30,9],[80,9]], 4: [[40,9],[90,9]], 5: [[30,9],[65,9],[102,9]],
-  6: [[40,9],[82,9]], 7: [[32,9],[88,9]], 8: [[40,9],[84,9]],
-  9: [[46,9],[89,9]], 10: [[45,9],[76,9]], 11: [[48,9],[70,9]],
+  6: [[45,9],[104,9]], 7: [[35,9],[92,9]], 8: [[45,9],[94,9]],
+  9: [[50,9],[96,9]], 10: [[51,9],[114,9]], 11: [[51,9],[76,9]],
 };
 const PK = { 3: [[10,6]], 4: [[30,5]], 5: [[50,4],[64,6]] };
 const UP = {
-  6: [[78,5,'starJump']], 7: [[42,5,'floatGlide']], 8: [[48,5,'dashChain']],
+  6: [[78,5,'starJump']], 7: [[42,3,'floatGlide']], 8: [[84,3,'dashChain']],
   9: [[52,4,'burstFireball']], 10: [[58,4,'wallFocus']], 11: [[30,5,'quakePound']],
 };
 const BOSS = {
-  6: [[92,9,'miniSlime',8]], 11: [[82,9,'kingSlime',16]],
+  6: [[116,9,'miniSlime',10]], 11: [[118,9,'kingSlime',22]],
+};
+const ENEMIES = {
+  6: [[34,9,'spitter'], [63,9,'charger'], [108,9,'spitter'], [122,9,'brute']],
+  7: [[67,9,'charger'], [96,9,'charger'], [112,3,'spitter'], [130,9,'brute']],
+  8: [[70,9,'charger'], [100,9,'charger'], [116,5,'spitter'], [132,9,'brute']],
+  9: [[43,9,'spitter'], [66,9,'charger'], [104,9,'brute'], [122,5,'spitter'], [136,9,'charger']],
+  10: [[58,9,'spitter'], [92,9,'charger'], [107,5,'spitter'], [128,9,'brute']],
+  11: [[60,3,'spitter'], [86,9,'charger'], [102,9,'brute']],
+};
+const TREASURES = {
+  6: [[53,4,'diamond',5], [126,7,'diamond',5]],
+  7: [[55,2,'diamond',5], [132,7,'diamond',5]],
+  8: [[24,5,'diamond',5], [86,3,'diamond',5]],
+  9: [[88,3,'diamond',5], [124,5,'diamond',5]],
+  10: [[42,2,'diamond',5], [134,7,'diamond',5]],
+  11: [[59,3,'diamond',5], [110,7,'diamond',5]],
 };
 
 function solid(ch){ return ch==='#'||ch==='B'||ch==='='; }
@@ -302,6 +335,19 @@ for (const idx of Object.keys(levels).map(Number).sort((a,b)=>a-b)) {
     if(!support) problems.push(`boss ${type} col${c},row${r}: nothing to stand on below`);
     if (!Number.isFinite(hp) || hp <= 0) problems.push(`boss ${type}: invalid hp ${hp}`);
   }
+  for (const [c,r,type] of (ENEMIES[idx] || [])) {
+    if (solid(cell(rows,r,c))) problems.push(`enemy ${type} col${c},row${r} embedded in solid`);
+    let support=false;
+    for (let rr=r+1; rr<=Math.min(ROWS-1,r+4); rr++) if (solid(cell(rows,rr,c))) {support=true;break;}
+    if(!support) problems.push(`enemy ${type} col${c},row${r}: nothing to stand on below`);
+  }
+  for (const [c,r,type,value] of (TREASURES[idx] || [])) {
+    if (solid(cell(rows,r,c))) problems.push(`treasure ${type} col${c},row${r} embedded in solid`);
+    let support=false;
+    for (let rr=r+1; rr<=Math.min(ROWS-1,r+4); rr++) if (solid(cell(rows,rr,c))) {support=true;break;}
+    if(!support) problems.push(`treasure ${type} col${c},row${r}: nothing to stand on below`);
+    if (!Number.isFinite(value) || value <= 0) problems.push(`treasure ${type}: invalid value ${value}`);
+  }
   console.log(`--- Level ${idx+1}  width=${W}  rows=${rows.length}  ${problems.length?'❌ '+problems.join(' | '):'✅ OK'}`);
   if (problems.length) ok=false;
 }
@@ -321,4 +367,8 @@ console.log('// upgrades');
 console.log(JSON.stringify(UP, null, 2));
 console.log('// bosses');
 console.log(JSON.stringify(BOSS, null, 2));
+console.log('// enemies');
+console.log(JSON.stringify(ENEMIES, null, 2));
+console.log('// treasures');
+console.log(JSON.stringify(TREASURES, null, 2));
 console.log('===END===  ok='+ok);

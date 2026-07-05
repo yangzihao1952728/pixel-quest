@@ -5,7 +5,7 @@
 'use strict';
 
 window.PIXEL_QUEST_ASSETS = {
-  version: 3,
+  version: 5,
   basePath: '',
 
   images: {
@@ -19,15 +19,25 @@ window.PIXEL_QUEST_ASSETS = {
       animations:{ idle:[0], run:[1,2,3,4], jump:[5], fall:[6], dead:[7] } },
     'characters.guard': { src:'', frameW:32, frameH:40, anchorX:16, anchorY:38, frameSpeed:7,
       animations:{ idle:[0], run:[1,2,3,4], jump:[5], fall:[6], dead:[7] } },
+    'characters.volt': { src:'assets/sprites/characters/volt.png', frameW:32, frameH:40, anchorX:16, anchorY:38, frameSpeed:7,
+      animations:{ idle:[0], run:[1,2,3,4], jump:[5], fall:[6], dead:[7] } },
+    'characters.oracle': { src:'assets/sprites/characters/oracle.png', frameW:32, frameH:40, anchorX:16, anchorY:38, frameSpeed:7,
+      animations:{ idle:[0], run:[1,2,3,4], jump:[5], fall:[6], dead:[7] } },
 
     // Enemy sheets: transparent PNG, bottom-center anchored.
     'enemies.slime': { src:'', frameW:32, frameH:32, anchorX:16, anchorY:30, frameSpeed:8,
       animations:{ walk:[0,1,2,3], hurt:[4], dead:[5] } },
     'enemies.eliteSlime': { src:'', frameW:40, frameH:40, anchorX:20, anchorY:38, frameSpeed:8,
       animations:{ walk:[0,1,2,3], hurt:[4], dead:[5] } },
-    'enemies.miniBoss': { src:'', frameW:64, frameH:56, anchorX:32, anchorY:54, frameSpeed:8,
+    'enemies.spitter': { src:'assets/sprites/enemies/spitter.png', frameW:44, frameH:40, anchorX:22, anchorY:38, frameSpeed:8,
+      animations:{ walk:[0,1,2,3], hurt:[4], dead:[5], charge:[6] } },
+    'enemies.charger': { src:'assets/sprites/enemies/charger.png', frameW:48, frameH:40, anchorX:24, anchorY:38, frameSpeed:8,
+      animations:{ walk:[0,1,2,3], hurt:[4], dead:[5], charge:[6,7] } },
+    'enemies.brute': { src:'assets/sprites/enemies/brute.png', frameW:56, frameH:48, anchorX:28, anchorY:46, frameSpeed:8,
       animations:{ walk:[0,1,2,3], hurt:[4], dead:[5], jump:[6] } },
-    'enemies.bigBoss': { src:'', frameW:96, frameH:80, anchorX:48, anchorY:78, frameSpeed:8,
+    'enemies.miniBoss': { src:'assets/sprites/enemies/mini-boss.png', frameW:64, frameH:56, anchorX:32, anchorY:54, frameSpeed:8,
+      animations:{ walk:[0,1,2,3], hurt:[4], dead:[5], jump:[6] } },
+    'enemies.bigBoss': { src:'assets/sprites/enemies/big-boss.png', frameW:96, frameH:80, anchorX:48, anchorY:78, frameSpeed:8,
       animations:{ walk:[0,1,2,3], hurt:[4], dead:[5], jump:[6], charge:[7,8,9,8] } },
 
     // Tile art: 40x40 cells. Put transparent empty space inside the PNG when needed.
@@ -97,6 +107,8 @@ window.PIXEL_QUEST_ASSETS = {
     // Items and flags.
     'items.coin': { src:'', frameW:24, frameH:24, anchorX:12, anchorY:12, frameSpeed:5,
       animations:{ spin:[0,1,2,3,4,5] } },
+    'items.diamond': { src:'assets/sprites/items/diamond.png', frameW:28, frameH:28, anchorX:14, anchorY:14, frameSpeed:6,
+      animations:{ spin:[0,1,2,3,4,5] } },
     'items.checkpoint': { src:'', frameW:64, frameH:96, anchorX:20, anchorY:88, frameSpeed:8,
       animations:{ inactive:[0], active:[1,2,3,2] } },
     'items.goal': { src:'', frameW:72, frameH:136, anchorX:24, anchorY:128, frameSpeed:8,
@@ -116,6 +128,10 @@ window.PIXEL_QUEST_ASSETS = {
     'items.skillOrb.groundPound': { src:'', frameW:40, frameH:40, anchorX:20, anchorY:20, frameSpeed:8,
       animations:{ pulse:[0,1,2,1] } },
     'items.skillOrb.wallJump': { src:'', frameW:40, frameH:40, anchorX:20, anchorY:20, frameSpeed:8,
+      animations:{ pulse:[0,1,2,1] } },
+    'items.skillOrb.aegis': { src:'assets/sprites/items/skill-orb-aegis.png', frameW:40, frameH:40, anchorX:20, anchorY:20, frameSpeed:8,
+      animations:{ pulse:[0,1,2,1] } },
+    'items.skillOrb.quickCast': { src:'assets/sprites/items/skill-orb-quick-cast.png', frameW:40, frameH:40, anchorX:20, anchorY:20, frameSpeed:8,
       animations:{ pulse:[0,1,2,1] } },
     'items.upgradeOrb': { src:'', frameW:40, frameH:40, anchorX:20, anchorY:20, frameSpeed:8,
       animations:{ pulse:[0,1,2,1] }, overlayGlyph:true },
@@ -141,6 +157,10 @@ window.PIXEL_QUEST_ASSETS = {
       animations:{ active:[0,1,2,1] } },
     'fx.groundPoundShock': { src:'', frameW:96, frameH:32, anchorX:48, anchorY:16, frameSpeed:4,
       animations:{ burst:[0,1,2,3] } },
+    'fx.enemyBolt': { src:'assets/sprites/fx/enemy-bolt.png', frameW:32, frameH:32, anchorX:16, anchorY:16, frameSpeed:4,
+      animations:{ fly:[0,1,2,3] } },
+    'fx.aegis': { src:'assets/sprites/fx/aegis.png', frameW:64, frameH:64, anchorX:32, anchorY:32, frameSpeed:5,
+      animations:{ active:[0,1,2,3] } },
 
     // Backgrounds should be 960x540 far layers and seamless 960x540 mid layers.
     'backgrounds.meadow.far': { src:'assets/backgrounds/meadow-far.png', frameW:960, frameH:540, anchorX:0, anchorY:0 },

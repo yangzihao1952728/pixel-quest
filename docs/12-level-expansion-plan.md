@@ -10,6 +10,7 @@
 - 后续关卡不复用前 6 关主题。第 7-12 关使用全新的主题、美术 key 和背景资源。
 - 第 7-12 关每关都必须提供一个技能强化拾取物，强化已有技能效果，不新增操作按键。
 - 第 7 关包含小 boss，第 12 关包含大 boss。boss 存活时终点被锁定，击败后才能过关。
+- 第 7-12 关采用更长的分段路线，并通过远程怪、冲锋怪、重装怪、钻石奖励和 boss 专属技能形成递进难度曲线。
 - 商店继续支持永久成长，并新增“下次游玩额外生命”这类单局消耗品。
 - 初始角色与角色图片资源必须通过 manifest key 解耦，不把具体图片路径写进玩法逻辑。
 
@@ -23,14 +24,39 @@
 | 4 | 跨越教学 | 熔岩 | 滑翔、长沟、危险地形 | 现有 lava |
 | 5 | 收集教学 | 冰雪 | 金币磁铁、金币路线、滑行感 | 现有 snow |
 | 6 | 组合教学 | 终焉洞穴 | 震地、蹬墙、全技能准备 | 现有 cave |
-| 7 | 综合考核 | 水晶遗迹 `crystal` | 星跃强化、小 boss | 新 crystal tiles/background/boss |
-| 8 | 空中路线 | 菌光森林 `fungal` | 浮游滑翔、纵向路线 | 新 fungal tiles/background |
-| 9 | 速度路线 | 机械工坊 `gearworks` | 连环冲刺、机关感平台 | 新 gearworks tiles/background |
-| 10 | 战斗路线 | 霓虹雨城 `neon` | 爆裂火球、密集敌人 | 新 neon tiles/background |
-| 11 | 技巧路线 | 时钟高塔 `clockwork` | 墙面蓄力、蹬墙挑战 | 新 clockwork tiles/background |
-| 12 | 终局战 | 星渊王座 `void` | 裂地冲击、大 boss | 新 void tiles/background/boss |
+| 7 | 综合考核 | 水晶遗迹 `crystal` | 星跃强化、远程怪预告、小 boss | 新 crystal tiles/background/boss/enemies |
+| 8 | 空中路线 | 菌光森林 `fungal` | 浮游滑翔、纵向路线、空中远程怪 | 新 fungal tiles/background/enemies |
+| 9 | 速度路线 | 机械工坊 `gearworks` | 连环冲刺、冲锋怪、速度奖励线 | 新 gearworks tiles/background/enemies |
+| 10 | 战斗路线 | 霓虹雨城 `neon` | 爆裂火球、混合敌群、钻石诱导路线 | 新 neon tiles/background/enemies/items |
+| 11 | 技巧路线 | 时钟高塔 `clockwork` | 墙面蓄力、蹬墙挑战、重装怪压制 | 新 clockwork tiles/background/enemies |
+| 12 | 终局战 | 星渊王座 `void` | 裂地冲击、大 boss、弹幕与震波 | 新 void tiles/background/boss/fx |
 
 第 1-6 关保持当前教学节奏，主要用于解锁基础技能。第 7-12 关默认玩家已经具备完整基础技能，地图设计应围绕技能组合、强化效果和 boss 战展开。
+
+当前平衡版已将第 7-12 关拉长为多段路线：第 7 关做综合复习并引入远程压力；第 8 关强调滑翔与空中平台；第 9 关强调冲刺节奏与冲锋怪；第 10 关强调火球/爆裂火球处理敌群；第 11 关强调墙跳和重装怪压制；第 12 关前半段热身，后半段进入大 boss 场地。
+
+## 强力敌人与奖励
+
+新增外置数据字段：
+
+```js
+enemies: {
+  6: [{ col:34, row:9, type:'spitter' }],
+},
+treasures: {
+  6: [{ col:53, row:4, type:'diamond', value:5 }],
+},
+```
+
+强力敌人类型：
+
+- `spitter`：远程怪，血量 2，会朝玩家发射晶弹/能量弹，适合放在平台或安全距离外制造节奏压力。
+- `charger`：冲锋怪，血量 2，玩家进入横向范围后会短距离高速冲刺，适合第 9 关之后的速度路线。
+- `brute`：重装怪，血量 3，体型更大且周期性跳跃压制，适合第 10-12 关作为火球、冲刺和震地的综合考验。
+
+奖励类型：
+
+- `diamond`：钻石，默认价值 5 金币。放置数量应少于金币，用于引导高风险奖励路线，不要铺满主路线。
 
 ## 新主题与资源清单
 
@@ -167,14 +193,24 @@
 - 血量建议：14-18。
 - 行为：
   - 一阶段：慢速巡逻、跳跃压制、接触伤害。
-  - 二阶段：血量低于 50% 后进入，移动更快，增加震波或短程投射物。
-  - 震地强化 `quakePound` 可打断指定蓄力攻击。
+  - 一阶段已增加虚空弹幕，迫使玩家移动和跳跃避让。
+  - 二阶段：血量低于 50% 后进入，移动更快，增加三向虚空弹幕和蓄力震波。
+  - 震地强化 `quakePound` 可打断蓄力震波，但不能取消普通弹幕。
 - 验收重点：
   - 血条清晰，二阶段反馈明显。
   - 击败前不能最终通关，击败后触发结算。
   - 玩家死亡并从检查点复活后 boss 状态处理明确。推荐第一版在重生时保持当前关卡实体状态，不额外恢复 boss 血量；如果实现成本过高，可以在文档和代码注释中明确重生会重置本关。
 
 ## 商店与角色
+
+### 技能库扩展
+
+当前技能库在 7 个基础技能之外新增两个被动技能：
+
+- `aegis` / 星盾护体：周期性抵挡一次伤害，不新增按键，适合帮助玩家应对后半程弹幕和冲锋失误。
+- `quickCast` / 疾速施法：降低火球冷却，并让火球贯穿一次敌人，适合第 10 关之后的混合敌群。
+
+新增被动技能仍走 `SKILLS` / `SHOP_SKILLS` / 存档技能布尔表，不需要移动端新增按钮。
 
 ### 永久生命升级
 
@@ -201,6 +237,8 @@
 - `scout`：速度更快，自带二段跳。
 - `ember`：自带火球，跳跃略弱。
 - `guard`：生命更多，自带震地。
+- `volt`：电光游侠，速度更快，自带冲刺和疾速施法。
+- `oracle`：星辉先知，跳跃略强，自带磁铁和星盾。
 
 维护要求：
 
@@ -240,8 +278,14 @@ window.PIXEL_QUEST_LEVEL_DATA = {
   checkpoints: {...},
   elites: {...},
   bosses: {
-    6: [{ col: 92, row: 9, type: 'miniSlime', hp: 8, gateGoal: true }],
-    11: [{ col: 82, row: 9, type: 'kingSlime', hp: 16, gateGoal: true }],
+    6: [{ col: 116, row: 9, type: 'miniSlime', hp: 10, gateGoal: true }],
+    11: [{ col: 118, row: 9, type: 'kingSlime', hp: 22, gateGoal: true }],
+  },
+  enemies: {
+    6: [{ col: 34, row: 9, type: 'spitter' }],
+  },
+  treasures: {
+    6: [{ col: 53, row: 4, type: 'diamond', value: 5 }],
   },
   levels: [...]
 };
@@ -287,6 +331,9 @@ Boss key：
 
 - `enemies.miniBoss`
 - `enemies.bigBoss`
+- `enemies.spitter`
+- `enemies.charger`
+- `enemies.brute`
 
 角色 key：
 
@@ -294,6 +341,16 @@ Boss key：
 - `characters.scout`
 - `characters.ember`
 - `characters.guard`
+- `characters.volt`
+- `characters.oracle`
+
+道具与特效 key：
+
+- `items.diamond`
+- `items.skillOrb.aegis`
+- `items.skillOrb.quickCast`
+- `fx.enemyBolt`
+- `fx.aegis`
 
 角色 spritesheet 继续采用透明 PNG、底部居中锚点。不要用图片尺寸改变玩家碰撞盒。
 
@@ -381,6 +438,12 @@ node verify_game.js
   - 终点锁定规则
   - `verify_game.js` 的 boss 校验
   - README boss 规则说明
+- 新增特殊敌人或宝物时，必须同步：
+  - `LEVEL_DATA.enemies` / `LEVEL_DATA.treasures`
+  - 实体工厂、AI、绘制和碰撞逻辑
+  - `verify_game.js` 的坐标/类型校验
+  - `assets/pixel-quest-assets.js` 的 manifest key
+  - README 规则说明
 - 新增角色时，必须同步：
   - `CHARACTERS`
   - 存档默认值

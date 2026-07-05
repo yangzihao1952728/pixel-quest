@@ -239,6 +239,8 @@
     <div class="skill" data-skill="magnet" style="--c:#ff5c8a"><span class="dot">◎</span>磁铁</div>
     <div class="skill" data-skill="groundPound" style="--c:#ff9f1c"><span class="dot">▼</span>震地</div>
     <div class="skill" data-skill="wallJump" style="--c:#4dd6c4"><span class="dot">⇄</span>蹬墙</div>
+    <div class="skill" data-skill="aegis" style="--c:#7dd3fc"><span class="dot">◆</span>星盾</div>
+    <div class="skill" data-skill="quickCast" style="--c:#ffb703"><span class="dot">✹</span>疾速</div>
   </div>
 
   <div id="toast"></div>
@@ -258,7 +260,7 @@
     <p>穿越 <b>12</b> 个主题关卡（草原·洞窟·天空·熔岩·冰雪·终焉·水晶·菌光·机械·霓虹·时钟·星渊），沿途解锁
       <b style="color:#8ecae6">二段跳</b> · <b style="color:#ffe066">冲刺</b> · <b style="color:#ff6b35">火球</b> ·
       <b style="color:#b388ff">滑翔</b> · <b style="color:#ff5c8a">磁铁</b> · <b style="color:#ff9f1c">震地</b> ·
-      <b style="color:#4dd6c4">蹬墙</b> 七大技能，并在后半段拾取技能强化。关卡途中有<b style="color:#7ee787">复活旗</b>，boss 存活时终点会被封印。</p>
+      <b style="color:#4dd6c4">蹬墙</b> 等技能，并在后半段拾取技能强化。后期会出现远程怪、冲锋怪、重装怪与少量钻石奖励；boss 存活时终点会被封印。</p>
     <div class="menuRow">
       <button class="btn" id="startBtn">继续冒险</button>
       <button class="btn alt" id="levelBtn">选关</button>
@@ -312,9 +314,19 @@
   </div>
 </div>
 
-<script src="data/pixel-quest-levels.js?v=2"></script>
-<script src="assets/pixel-quest-assets.js?v=3"></script>
+<script src="data/pixel-quest-levels.js?v=3"></script>
+<script src="assets/pixel-quest-assets.js?v=5"></script>
 <script src="save/pixel-quest-save.js?v=2"></script>
-<script src="game.js?v=9"></script>
+<!-- Pixel Quest modules (load order matters; pq-main bootstraps last) -->
+<script src="src/pq-core.js?v=2"></script>
+<script src="src/pq-art.js?v=1"></script>
+<script src="src/pq-input.js?v=1"></script>
+<script src="src/pq-audio.js?v=1"></script>
+<script src="src/pq-save.js?v=2"></script>
+<script src="src/pq-level.js?v=2"></script>
+<script src="src/pq-update.js?v=2"></script>
+<script src="src/pq-render.js?v=2"></script>
+<script src="src/pq-ui.js?v=1"></script>
+<script src="src/pq-main.js?v=1"></script>
 </body>
 </html>

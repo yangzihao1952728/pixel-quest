@@ -97,9 +97,40 @@ assets/backgrounds/
   clockwork-mid.png
   void-far.png
   void-mid.png
+
+assets/sprites/characters/
+  rookie.png
+  scout.png
+  ember.png
+  guard.png
+  volt.png
+  oracle.png
+
+assets/sprites/enemies/
+  slime.png
+  elite-slime.png
+  spitter.png
+  charger.png
+  brute.png
+  mini-boss.png
+  big-boss.png
+
+assets/sprites/items/
+  coin.png
+  diamond.png
+  checkpoint.png
+  goal.png
+  skill-orb-aegis.png
+  skill-orb-quick-cast.png
+
+assets/sprites/fx/
+  enemy-bolt.png
+  aegis.png
 ```
 
 每个 tile 文件是单张 `40x40` PNG。背景 `far` 和 `mid` 都是 `960x540` PNG，其中 `mid` 需要左右无缝循环。
+
+角色 spritesheet 使用透明 PNG，单帧 `32x40`，帧序为 idle、run 1-4、jump、fall、dead。敌人 spritesheet 使用透明 PNG，底部居中锚点，尺寸以 `assets/pixel-quest-assets.js` manifest 为准。道具和 FX 也以 manifest 的 `frameW/frameH/anchor` 为准。
 
 ## 通用负面提示词
 
@@ -363,6 +394,64 @@ Side-scrolling 2D platformer mid layer, left edge and right edge must match perf
 - `neon-mid.png`：雨棚、远处灯箱色块、湿润屋顶剪影，左右无缝，无文字。
 - `clockwork-mid.png`：铜管、齿轮墙、摆锤剪影，左右无缝，不出现数字或 UI。
 - `void-mid.png`：漂浮星石、裂隙光带、王座台阶远影，左右无缝，不像实体平台。
+
+## 角色与敌人资源提示词
+
+以下内容可直接交给美术 agent。只绘制透明 PNG spritesheet，不修改玩法代码、碰撞盒或 manifest 尺寸。
+
+### 角色
+
+通用要求：
+
+```text
+Create a transparent PNG pixel-art character spritesheet for Pixel Quest.
+Side-view 2D platformer hero, 32x40 frame size, bottom-center anchored, crisp hard pixels, no anti-aliasing, no blur.
+Frames in order: idle, run 1, run 2, run 3, run 4, jump, fall, dead.
+Readable silhouette at small size, no weapons larger than the frame, no text, no UI.
+```
+
+角色差异：
+
+- `rookie.png`：红帽蓝衣均衡旅人，明亮主角感。
+- `scout.png`：轻装绿色/青色斥候，速度感强，披风或围巾不能超出帧太多。
+- `ember.png`：橙红术士，火焰主题帽檐或手套，避免大面积发光遮挡身体。
+- `guard.png`：银灰重甲守卫，橙色头盔点缀，体型仍保持 26x36 碰撞盒可读。
+- `volt.png`：黄色/蓝色电光游侠，轻甲、短电弧装饰，突出速度。
+- `oracle.png`：淡紫/天蓝星辉先知，护符或星纹装饰，突出星盾和收集倾向。
+
+### 敌人与 Boss
+
+```text
+Create transparent PNG pixel-art enemy spritesheets for Pixel Quest.
+Side-view 2D platformer enemies, bottom-center anchored, crisp hard pixels, no anti-aliasing, no blur.
+Use strong silhouettes and distinct color language so players can identify behavior before contact.
+No text, no UI, no realistic rendering.
+```
+
+- `spitter.png`：远程怪，青蓝晶体/毒囊造型，嘴部或晶管清楚，帧包含 walk、hurt、dead、charge。
+- `charger.png`：冲锋怪，橙黄角或护额，身体前倾，charge 帧要明显表达高速准备。
+- `brute.png`：重装怪，暗红厚重体型，跳跃/落地压迫感强，不能看起来像 boss。
+- `mini-boss.png`：水晶史莱姆，紫蓝水晶冠，包含 walk、hurt、dead、jump。
+- `big-boss.png`：星渊王，暗紫王冠与虚空星纹，包含 walk、hurt、dead、jump、charge。
+
+## 道具与 FX 资源提示词
+
+- `diamond.png`：28x28 透明 PNG spritesheet，6 帧旋转，高价值青蓝钻石，亮度高于金币但不遮挡角色。
+- `skill-orb-aegis.png`：40x40 透明 PNG，星盾护体技能球，蓝白护盾符号，pulse 4 帧。
+- `skill-orb-quick-cast.png`：40x40 透明 PNG，疾速施法技能球，金色火花/法术加速符号，pulse 4 帧。
+- `enemy-bolt.png`：32x32 透明 PNG，4 帧飞行弹幕，可同时适配晶弹和虚空弹，主体清楚、危险色明显。
+- `aegis.png`：64x64 透明 PNG，4 帧护盾爆发，围绕玩家中心，不要大面积不透明遮挡场景。
+
+## 美术 Agent 任务包
+
+优先级：
+
+1. 绘制 `spitter.png`、`charger.png`、`brute.png`、`enemy-bolt.png`，先解决新增难度机制的可读性。
+2. 绘制 `mini-boss.png`、`big-boss.png`、`aegis.png`，强化 boss 战和星盾反馈。
+3. 绘制 `diamond.png`、`skill-orb-aegis.png`、`skill-orb-quick-cast.png`，补齐奖励与技能识别。
+4. 绘制 `volt.png`、`oracle.png`，再回补旧角色 spritesheet。
+
+交付后需要把实际文件路径填入 `assets/pixel-quest-assets.js` 对应 key，并在缺图 fallback 仍可运行的前提下做浏览器截图验收。
 
 ## 验收清单
 

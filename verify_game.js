@@ -16,8 +16,12 @@ const LEVELS = DATA.levels;
 const PICKUPS = DATA.pickups || {};
 const CHECKPOINTS = DATA.checkpoints || {};
 const ELITES = DATA.elites || {};
+const ENEMIES = DATA.enemies || {};
 const UPGRADES = DATA.upgrades || {};
 const BOSSES = DATA.bosses || {};
+const TREASURES = DATA.treasures || {};
+const SPECIAL_ENEMY_TYPES = new Set(['spitter','charger','brute']);
+const TREASURE_TYPES = new Set(['diamond']);
 
 const SOLID = new Set(Array.isArray(DATA.solidTiles) ? DATA.solidTiles : ['#','B','=']);
 const cell = (rows,r,c) => { const l = rows[r] || ''; return l[c] || ' '; };
@@ -116,6 +120,25 @@ LEVELS.forEach((rows, idx) => {
     let support = alreadySlime;
     for (let rr=r+1; rr<=Math.min(H-1,r+4); rr++) if (solid(cell(rows,rr,c))) { support=true; break; }
     if (!support) prob.push(`elite@${c},${r} no support`);
+  }
+
+  for (const e of (ENEMIES[idx] || [])) {
+    const { col:c, row:r } = e;
+    if (!SPECIAL_ENEMY_TYPES.has(e.type)) prob.push(`enemy@${c},${r} unknown type ${e.type}`);
+    if (solid(cell(rows,r,c))) prob.push(`enemy ${e.type}@${c},${r} embedded`);
+    let support=false;
+    for (let rr=r+1; rr<=Math.min(H-1,r+4); rr++) if (solid(cell(rows,rr,c))) { support=true; break; }
+    if (!support) prob.push(`enemy ${e.type}@${c},${r} no support`);
+  }
+
+  for (const tr of (TREASURES[idx] || [])) {
+    const { col:c, row:r } = tr;
+    if (!TREASURE_TYPES.has(tr.type)) prob.push(`treasure@${c},${r} unknown type ${tr.type}`);
+    if (solid(cell(rows,r,c))) prob.push(`treasure ${tr.type}@${c},${r} embedded`);
+    let support=false;
+    for (let rr=r+1; rr<=Math.min(H-1,r+4); rr++) if (solid(cell(rows,rr,c))) { support=true; break; }
+    if (!support) prob.push(`treasure ${tr.type}@${c},${r} no support`);
+    if (!Number.isFinite(Number(tr.value)) || Number(tr.value) <= 1) prob.push(`treasure ${tr.type}@${c},${r} invalid value`);
   }
 
   const levelBosses = BOSSES[idx] || [];
